@@ -10,7 +10,7 @@ services:
       - ./frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
       # If you develop on Mac or Windows you can remove the vendor/ directory
       #  from the bind-mount for better performance by enabling the next line:
-      - /app/vendor
+      # - /app/vendor
     environment:
       MERCURE_EXTRA_DIRECTIVES: demo
       # See https://xdebug.org/docs/all_settings#mode
@@ -26,5 +26,9 @@ services:
 ###> doctrine/doctrine-bundle ###
   database:
     ports:
-      - "3306"
+      - target: 3306
+        published: 3306
+        protocol: tcp
+    volumes:
+      - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
 ###< doctrine/doctrine-bundle ###
